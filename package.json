@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "json:server": "json-server --watch db/db.json"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +14,8 @@
     "express-graphql": "^0.12.0",
     "graphql": "^16.5.0",
     "lodash": "^4.17.21"
+  },
+  "dependencies": {
+    "json-server": "^0.17.0"
   }
 }
