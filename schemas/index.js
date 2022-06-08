@@ -54,6 +54,14 @@ const RootQuery = new GraphQLObjectType({
         return api(`/users/${args.id}`).then((response) => response.data);
       },
     },
+    company: {
+      type: CompanyType,
+      args: { id: { type: GraphQLInt } },
+      resolve: async (parentValue, args) => {
+        const { data } = await api(`/companies/${args.id}`);
+        return data;
+      },
+    },
   },
 });
 
