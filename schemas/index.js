@@ -102,6 +102,20 @@ const RootMutation = new GraphQLObjectType({
         return response.status === 200;
       },
     },
+    updateUser: {
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) },
+        firstName: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        companyId: { type: GraphQLInt },
+      },
+      resolve: async (parentValue, { id, firstName, age, companyId }) => {
+        const user = { firstName, age, companyId };
+        const { data: updatedUser } = await api.patch(`/users/${id}`, user);
+        return updatedUser;
+      },
+    },
   },
 });
 
