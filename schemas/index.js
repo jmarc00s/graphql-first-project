@@ -8,6 +8,7 @@ const {
   GraphQLSchema,
   GraphQLList,
   GraphQLNonNull,
+  GraphQLBoolean,
 } = graphql;
 
 const CompanyType = new GraphQLObjectType({
@@ -89,6 +90,16 @@ const RootMutation = new GraphQLObjectType({
         const user = { ...args };
         const { data: createdUser } = await api.post("/users", user);
         return createdUser;
+      },
+    },
+    removeUser: {
+      type: GraphQLBoolean,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (parentValue, args) => {
+        const response = await api.delete(`/users/${args.id}`);
+        return response.status === 200;
       },
     },
   },
