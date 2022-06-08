@@ -1,15 +1,17 @@
 const graphql = require("graphql");
-const axios = require("axios");
+const { api } = require("../service");
 
-const api = axios.create({
-  baseURL: "http://localhost:3000",
-});
-
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLSchema,
+  GraphQLList,
+} = graphql;
 
 const CompanyType = new GraphQLObjectType({
   name: "Company",
-  fields: {
+  fields: () => ({
     id: {
       type: GraphQLInt,
     },
@@ -19,12 +21,19 @@ const CompanyType = new GraphQLObjectType({
     description: {
       type: GraphQLString,
     },
-  },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve: async (parentValue, args) => {
+        const { data } = await api(`/companies/${parentValue.id}/users`);
+        return data;
+      },
+    },
+  }),
 });
 
 const UserType = new GraphQLObjectType({
   name: "User",
-  fields: {
+  fields: () => ({
     id: {
       type: GraphQLString,
     },
@@ -41,7 +50,7 @@ const UserType = new GraphQLObjectType({
         return api(`/companies/${companyId}`).then((response) => response.data);
       },
     },
-  },
+  }),
 });
 
 const RootQuery = new GraphQLObjectType({
