@@ -110,9 +110,11 @@ const RootMutation = new GraphQLObjectType({
         age: { type: GraphQLInt },
         companyId: { type: GraphQLInt },
       },
-      resolve: async (parentValue, { id, firstName, age, companyId }) => {
-        const user = { firstName, age, companyId };
-        const { data: updatedUser } = await api.patch(`/users/${id}`, user);
+      resolve: async (parentValue, args) => {
+        const { data: updatedUser } = await api.patch(
+          `/users/${args.id}`,
+          args
+        );
         return updatedUser;
       },
     },
